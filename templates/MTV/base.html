@@ -1,0 +1,225 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>KG ChaChaCha List Page</title>
+    
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/album/">
+    
+    
+
+    <!-- Bootstrap core CSS -->
+    
+    <link href='{%static "assets/dist/css/bootstrap.min.css" %}' rel="stylesheet">
+    <link href='{%static "signin.css" %}' rel="stylesheet">
+     <!-- Jquery CDN URL -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+     <!-- Fontawesome URL -->
+    <script src="https://kit.fontawesome.com/53e4af2e34.js" crossorigin="anonymous"></script>
+    <style>
+      header {
+        width : 100%;
+      }
+      main {
+        width : 100%;
+        background-color: #f5f5f5;
+      }
+
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      footer {
+        background-color: black;
+        color: white;
+        font-size : 14.5px;
+        padding: 30px 0 20px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+      }
+      .Subcontainer {
+        display: flex;
+        justify-content: flex-start;
+      }
+      footer > p {
+        margin: 8px 10px 0 10px;
+      }
+      .cont-box {
+        display: flexbox;
+        text-align: left;
+        width: 1000px;
+      }
+      #car_title {
+        font-size : 26px;
+      }
+      #car_sub {
+        font-size : 17px;
+        font-weight : bold;
+      }
+      body { 
+        background-color: #f5f5f5;
+      }
+      
+      @media ( max-width : 992px ) {
+        #car_title {
+          font-size : 20px;
+        }
+        #car_sub { 
+          font-weight : bold;
+        }
+        img {
+          height : 210px;
+        }
+      }
+      @media ( max-width : 575px ) {
+        #car_title {
+          font-size : 28px;
+        }
+        #car_sub {
+          font-size : 22px;
+          font-weight : bold;
+        }
+      }
+
+      a { 
+        text-decoration : none;
+      }
+      a:hover {
+        font-weight : bold;
+      }
+      .logbox {
+        box-shadow : 3px 3px 3px grey;
+        border-radius : 25px;
+        max-width: 440px;
+        padding: 20px 20px 30px 20px;
+        margin : auto;
+         }
+      #car_img {
+        transition: all 0.2s linear;
+      }
+      #car_content:hover .card {
+        border:#007bff 3px solid;
+        border-radius : 20px;
+      }
+      #car_content:hover #car_img {
+        transform: scale(1.1);
+      }
+      #buy_btn:hover {
+        background-color : white !important;
+        color : #0d6efd !important;
+        border : 3px solid #0d6efd;
+        overflow : hidden;
+      }
+      #s_btn:hover {
+        background-color : white !important;
+        color : #3C763D !important;
+        border : 3px solid #3C763D;
+      }
+      #highlight:hover {
+        font-weight : bold;
+      }
+      .sort_btn:hover {
+        color : #3C763D !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="collapse bg-primary" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-md-7 py-4">
+              <h4 class="text-white">About</h4>
+              <p class="text-white opacity-75 ">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+            </div>
+            <div class="col-sm-4 offset-md-1 py-4">
+              <h4 class="text-white">Contact</h4>
+              <ul class="list-unstyled">
+                {% if user.is_anonymous %}
+                <li><a href="{% url 'MTV:login' %}" class="text-white">Login</a></li>
+                <li><a href="{% url 'common:signup' %}" class="text-white">Signup</a></li>
+                {% else %}
+                  {% if user.is_superuser %}
+                      <li class="text-white">Admin Mode</li>
+                  {% else%}
+                      <li class="text-white">{{user.username}}님 환영합니다!</li>
+                  {% endif %}
+                  <li><a href="#" class="text-white">관심 차량</a></li>
+                  <li><a href="{% url 'common:logout' %}" class="text-white">Logout</a></li>
+                {% endif%}
+                <li><a href="#" class="text-white">Like on Facebook</a></li>
+                <li><a href="#" class="text-white">Email me</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar navbar-dark bg-primary shadow-sm">
+        <div class="container">
+          <a href="{% url 'MTV:main' %}" class="navbar-brand d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-car-front-fill" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679c.033.161.049.325.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.807.807 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2H6ZM2.906 5.189l.956-1.913A.5.5 0 0 1 4.309 3h7.382a.5.5 0 0 1 .447.276l.956 1.913a.51.51 0 0 1-.497.731c-.91-.073-3.35-.17-4.597-.17-1.247 0-3.688.097-4.597.17a.51.51 0 0 1-.497-.731Z"/>
+            </svg>
+            <strong class="ms-2">KG_CHA</strong>
+          </a>
+          <button style="color : white !important" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+
+{% block content %}
+
+{% endblock %}
+{% block script %}
+
+{% endblock %}
+
+
+    <script src='{%static "assets/dist/js/bootstrap.bundle.min.js" %}'></script>
+    <footer> &nbsp;
+      <div class="cont-box">
+      <div class="Subcontainer" style="font-size:14px">
+        <span style="margin:8px 77px 0 10px;">
+          KG차차차(주)  
+        </span>
+        <div >
+          <p>대표자:유영현 &nbsp;&nbsp;|&nbsp;&nbsp; 사업자등록번호 : 105-86-12342 &nbsp;&nbsp;|&nbsp;&nbsp; 통신판매업 신고 : 2022-서울노량진-1592</p>
+          <p>서울특별시 노량진동 KG_IT로 스마트빌딩 신관 3층 304호</p>
+        </div>
+      </div>
+    
+      <hr>
+    
+      <p style="font-size:14px"><span style="margin:0px 107px 0 0;">고객센터</span> <span style="color:#0096FF; font-weight:bold;
+        font-size:18px"
+        >1544-7543</span> &nbsp;&nbsp;|&nbsp;&nbsp; 평일 09:00~18:00 토,일,공휴일 휴무 &nbsp;&nbsp;|&nbsp;&nbsp; 제휴협력 및 PR문의 : KGchachcha@naver.com</p>
+    
+      <hr>
+    
+      <p>회사소개 &nbsp;&nbsp;|&nbsp;&nbsp; 이용약관 &nbsp;&nbsp;|&nbsp;&nbsp; 환불약관 &nbsp;&nbsp;|&nbsp;&nbsp; 개인정보처리방침</p>
+      <p style="font-size: 14; color:#DDDDDD; margin-top:14px;"> Copyright&copy;2022 By KG_cha.Co All Rights Reserved.</p>
+
+    </footer>
+  </body>
+</html>

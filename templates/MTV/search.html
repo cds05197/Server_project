@@ -1,0 +1,104 @@
+{% extends 'MTV/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+
+<main>
+  <section class="py-0 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+
+        {% if Keyword %}
+        <h1 class="fw-light">KG 차차차</h1>
+        <p class="lead text-muted"><span style="font-weight : bold;">{{Keyword}}</span> 에 대한 검색결과가 <span class="fw-bold">{{Count}}건</span> 있습니다.</p>          
+        {% endif %}
+          <form class="d-flex" method="POST" action="{% url 'MTV:search' %}">
+            {% csrf_token %}
+            <input class="form-control me-3 fw-bold fs-5" style = "border-radius : 10px;" type="search" placeholder="차량 검색" aria-label="Search"
+            name="keyword">
+            <button class="btn btn-outline-primary" style = "padding-bottom : 9px; border-radius : 10px;" type="submit"><span class="fw-bold">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+              </svg>
+            </span></button>
+          </form>
+      </div>
+    </div>
+  </section>
+  
+  {% if Car_List %}
+  <div class="album py-5 bg-white ">
+    <div class="text-end pe-3 text-primary pt-2" style=" height : 40px; width : 68%; margin:-30px 16% 26px 16%; font-size:23px;">
+      <span class="text-muted fw-bold" style="font-size:21px;">가격순</span>
+      {% if check == "priceup" %}
+        <i class="fa-solid fa-circle-chevron-up text-success"></i>
+      {% else %}
+        <a href="{% url 'MTV:Sort_Search' man="priceup" keyword=Keyword%}"><i class="fa-solid fa-circle-chevron-up sort_btn"></i></a> 
+      {% endif %}
+      {% if check == "pricedown" %}
+        <i class="fa-solid fa-circle-chevron-down text-success" style="margin-left:-4.5px;"></i>
+      {% else %}
+        <a href="{% url 'MTV:Sort_Search' man="pricedown" keyword=Keyword %}"><i class="fa-solid fa-circle-chevron-down sort_btn" style="margin-left:-4.5px;"></i></a>
+      {% endif %}
+      <span class="text-muted fw-bold" style="font-size:21px;">연식순</span> 
+      {% if check == "ageup"%}
+        <i class="fa-solid fa-circle-chevron-up text-success"></i>
+      {% else %}
+        <a href="{% url 'MTV:Sort_Search' man="ageup" keyword=Keyword %}"><i class="fa-solid fa-circle-chevron-up sort_btn"></i></a>
+      {% endif %}
+      {% if check == "agedown"%}
+        <i class="fa-solid fa-circle-chevron-down text-success" style="margin-left:-4.5px;"></i>
+      {% else %}
+        <a href="{% url 'MTV:Sort_Search' man="agedown" keyword=Keyword %}"><i class="fa-solid fa-circle-chevron-down sort_btn" style="margin-left:-4.5px;"></i></a>
+      {% endif %}
+      <span class="text-muted fw-bold" style="font-size:21px;">주행거리순</span>
+      {% if check == "kiloup"%}
+        <i class="fa-solid fa-circle-chevron-up text-success"></i>
+      {% else %}
+        <a href="{% url 'MTV:Sort_Search' man="kiloup" keyword=Keyword %}"><i class="fa-solid fa-circle-chevron-up sort_btn"></i></a>
+      {% endif %}
+      {% if check == "kilodown"%}
+       <i class="fa-solid fa-circle-chevron-down text-success" style="margin-left:-4.5px;"></i>
+      {% else %}
+       <a href="{% url 'MTV:Sort_Search' man="kilodown" keyword=Keyword %}"><i class="fa-solid fa-circle-chevron-down sort_btn" style="margin-left:-4.5px;"></i></a>
+      {% endif %}
+      <span class="text-muted fw-bold ms-3" style="font-size:21px; margin-right:-2px;">초기화</span>
+      <a href="{% url 'MTV:search_reset' keyword=Keyword %}"><i class="fa-solid fa-arrows-rotate sort_btn"></i></a>
+    </div>
+    <div class="container mb-5">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+    {% for Car in Car_List %}
+        
+              <div class="col">
+                <div class="card shadow ">
+                  <img class="card-img-top" width="100%" height="290" src="{% get_static_prefix %}images/{{Car.img}}.png" > 
+                  <div class="card-body">
+                    <p class="fw-bold mb-0" id="car_title">{{Car.name}}</p>
+                    <p class="mb-2" id="car_sub">담당자 : {{Car.manager.name}}</p>
+                    <p style="font-size:14px"class="text-muted mb-2">연식 : {{Car.age}} | 주행거리 : {{Car.kilo}}km</p>
+                    <p class="text-primary fs-5 fw-bold">{{Car.price|intcomma}} 만원</p>
+                    <div class="d-flex justify-content-end align-items-center">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-primary">
+                          <a href="/MTV/{{Car.id}}/">상세 보기</a></button>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           
+      {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% else %}
+      <h3 class="text-center" style="background-color: white; height : 300px; line-height:220px;"><span style="font-weight : bold;">"{{Keyword}}"</span>에 대한 검색결과가 없습니다.</h3>
+    {% endif %}
+  
+  
+      
+</main>
+{% endblock%}
