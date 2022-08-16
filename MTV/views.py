@@ -167,8 +167,11 @@ def Detail (request, Car_id):
   B_con = []
   C_con = []
   D_con = []
+  if request.user.is_authenticated:
+    active = MyCar.objects.filter(mycar=car, car_user=request.user)
+  else:
+    active = request.user.is_authenticated
   
-  active = MyCar.objects.filter(mycar=car, car_user=request.user)
 
   opt_A = OptionA.objects.filter(Car=car).values_list()
   opt_A = list(opt_A)
