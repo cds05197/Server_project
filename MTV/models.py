@@ -1,5 +1,6 @@
 from tkinter import CASCADE
 from django.db import models
+from django.contrib.auth.models import User
 
 #Create your models here.
 
@@ -26,6 +27,10 @@ class Car(models.Model):
   
   def __str__(self):
     return self.name
+
+class MyCar(models.Model):
+  mycar = models.ForeignKey(Car, on_delete=models.CASCADE)
+  car_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class OptionA(models.Model):
   Car = models.ForeignKey(Car,on_delete=models.CASCADE)

@@ -4,6 +4,7 @@ from . import views
 app_name='MTV'
 urlpatterns = [
     path('',views.Main),
+    path('mycar/', views.Mycar, name="mycar"),
     path('login/',views.Login, name="login"),
     path('main/',views.Main, name="main"),
     path('make/', views.Create),
@@ -17,4 +18,7 @@ urlpatterns = [
     path('<int:Car_id>/',views.Detail, name="Detail"),
     path('<man>/', views.Sort_Main, name="Sort_Main"),
     path('search/<man>/<keyword>/', views.Sort_Search, name="Sort_Search"),
+    path('create/<car>/', views.Mycar_Create, name="mycar_create"),
+    path('delete/<car>/', views.Mycar_Delete, name="mycar_delete"),
+    
 ]

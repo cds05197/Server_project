@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Car,Manager,OptionA,OptionB,OptionC,OptionD
+from .models import Car,Manager,OptionA,OptionB,OptionC,OptionD,MyCar
 # Register your models here.
 
 admin.site.register(Car)
+admin.site.register(MyCar)
 admin.site.register(Manager)
 admin.site.register(OptionA)
 admin.site.register(OptionB)

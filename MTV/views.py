@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from MTV.models import Car,Manager,OptionA,OptionB,OptionC,OptionD
+from MTV.models import Car,Manager,OptionA,OptionB,OptionC,OptionD,MyCar
 import random
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -15,12 +16,6 @@ def Main (request):
   Car_List = Car.objects.all().order_by()
   return render(request, "MTV/main.html",{"Car_List" : Car_List})
 
-def Search (request):
-  str = request.POST['keyword']
-  result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str)
-  count = Car.objects.filter(name__icontains=str).count() | Car.objects.filter(owner__icontains=str).count()
-  print(result)
-  return render(request, "MTV/search.html",{"Car_List" : result, "Keyword" : str, "Count" : count})
 
 def Search_reset (request, keyword):
   str = keyword
@@ -173,6 +168,8 @@ def Detail (request, Car_id):
   C_con = []
   D_con = []
   
+  active = MyCar.objects.filter(mycar=car, car_user=request.user)
+
   opt_A = OptionA.objects.filter(Car=car).values_list()
   opt_A = list(opt_A)
   opt_A = list(opt_A[0])
@@ -206,11 +203,12 @@ def Detail (request, Car_id):
     D_con.append(context)
 
   return render(request, 'MTV/detail.html', {'Car' : car, 'Manager' : manager,
-  "opt_A" : A_con, "opt_B" : B_con, "opt_C" : C_con, "opt_D" : D_con})
+  "opt_A" : A_con, "opt_B" : B_con, "opt_C" : C_con, "opt_D" : D_con, "active" : active})
   
 
 def Sort_Main(request, man):
-  
+  car = ""
+  check = ""
   if man == 'ageup':
     car = Car.objects.all().order_by('-age')
     check = "ageup"
@@ -229,37 +227,56 @@ def Sort_Main(request, man):
   elif man == 'pricedown':
     car = Car.objects.all().order_by('price')
     check = "pricedown"
-   
   return render(request, "MTV/main.html",{"Car_List" : car, "check" : check})
 
 def Sort_Search(request, man, keyword):
   str = keyword
+  count = Car.objects.filter(name__icontains=str).count() | Car.objects.filter(owner__icontains=str).count()
   
   if man == 'ageup':
-    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('age')
+    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('-age')
     check = "ageup"
   elif man == 'agedown':
-    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('-age')
+    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('age')
     check = "agedown"
   elif man == 'kiloup':
-    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('kilo')
+    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('-kilo')
     check = "kiloup"
   elif man == 'kilodown':
-    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('-kilo')
+    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('kilo')
     check = "kilodown"
   elif man == 'priceup':
-    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('price')
+    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('-price')
     check = "priceup"
   elif man == 'pricedown':
-    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('-price')
+    result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str).order_by('price')
     check = "pricedown"
-   
-  return render(request, "MTV/search.html",{"Car_List" : result, "Keyword" : str, "check" : check})
+  return render(request, "MTV/search.html",{"Car_List" : result, "Keyword" : str, "check" : check, "Count" : count})
   
-  
-  
-  
-  
-  
-  
-  
+def Search (request):
+  str = request.POST['keyword']
+  result = Car.objects.filter(name__icontains=str) | Car.objects.filter(owner__icontains=str)
+  count = Car.objects.filter(name__icontains=str).count() | Car.objects.filter(owner__icontains=str).count()
+  print(result)
+  return render(request, "MTV/search.html",{"Car_List" : result, "Keyword" : str, "Count" : count})
+
+def Mycar (request):
+  result = MyCar.objects.filter(car_user=request.user)
+  count = MyCar.objects.filter(car_user=request.user).count()
+  return render(request, "MTV/mycar.html",{"Car_List" : result, "Count" : count})
+
+def Mycar_Create (request, car):
+  mycar = Car.objects.get(id=car)
+  Car_id = mycar.id
+  myuser = request.user
+  Mycar = MyCar(mycar=mycar,car_user=myuser)
+  Mycar.save()
+  return Detail(request, Car_id)
+
+def Mycar_Delete (request, car):
+  mycar = Car.objects.get(id=car)
+  Car_id = mycar.id
+  myuser = request.user
+  Mycar = MyCar.objects.filter(mycar=mycar,car_user=myuser)
+  Mycar.delete()
+  return Detail(request, Car_id)
