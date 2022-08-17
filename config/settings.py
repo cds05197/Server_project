@@ -81,19 +81,33 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+DATABASE_ROUTERS = [
+    'MTV.dbrouter.MultiDBRouter',
+]
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'django_db',
-        # 'USER': 'django',
-        # 'PASSWORD': 'admin',
-        # 'HOST': '192.168.1.151',
-        # 'PORT': '3306'
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_db',
+        'USER': 'django',
+        'PASSWORD': 'root',
+        'HOST': '10.100.220.1',
+        'PORT': '3306'
+    },
+    'readonly': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_db',
+        'USER': 'django',
+        'PASSWORD': 'root',
+        'HOST': '10.100.220.2',
+        'PORT': '3306'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
