@@ -28,7 +28,7 @@ SECRET_KEY = '#c*%v9=os4@ji44z$#@95b8s4cs^$(irx=!@yv@)rp+7)e9yqn'
 DEBUG = True
 
 # ACL이냐? ACL이네
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'MTV.apps.MtvConfig',
-    'Board.apps.BoardConfig',
     'common.apps.CommonConfig',
     'django.contrib.humanize',
 ]
@@ -81,33 +80,54 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASE_ROUTERS = [
+
+
+
+
+# Test Flaf if you want Deployment, Change Value to False
+is_Production = True
+DataBase_Name = "django_db"
+DataBase_Write_Endpoint = "test-db-cluster.cluster-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
+DataBase_Read_Endpoint = "test-db-cluster-readreplica.clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
+DataBase_User = "root"
+DataBase_User_Password = "tmdgur123"
+
+
+# In Pord Case, Use RDS Aurora and read replica
+if is_Production:
+    DATABASE_ROUTERS = [
     'MTV.dbrouter.MultiDBRouter',
-]
+    ]
+    DATABASES = {
+        'default': {
 
-
-DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_db',
-        'USER': 'django',
-        'PASSWORD': 'root',
-        'HOST': '10.100.220.1',
-        'PORT': '3306'
-    },
-    'readonly': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_db',
-        'USER': 'django',
-        'PASSWORD': 'root',
-        'HOST': '10.100.220.2',
-        'PORT': '3306'
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': DataBase_Name,
+            'USER': DataBase_User,
+            'PASSWORD': DataBase_User_Password,
+            'HOST': DataBase_Write_Endpoint,
+            'PORT': '3306',
+            "OPTIONS": {"charset": "utf8mb4"}
+        },
+        'readonly': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': DataBase_Name,
+            'USER': DataBase_User,
+            'PASSWORD': DataBase_User_Password,
+            'HOST': DataBase_Read_Endpoint,
+            'PORT': '3306',
+            "OPTIONS": {"charset": "utf8mb4"}
+        }
     }
-}
+# In Test Case, Use sqllite
+else:
+        DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -144,13 +164,14 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+import os
 STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-import os
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

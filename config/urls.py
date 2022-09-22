@@ -20,7 +20,7 @@ Including another URLconf
 # 아니다 root DNS 느낌이다.
 from django.contrib import admin
 from django.urls import path, include
-from Board import views
+from MTV import views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -29,6 +29,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('MTV/', include('MTV.urls')),
     path('common/', include('common.urls')),
-    path('Board/', include('Board.urls')),
-    path('',views.BoardList.as_view(),name='list'),
+    path('',views.Main),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

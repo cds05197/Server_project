@@ -4,7 +4,7 @@
 <main class="form-signin logbox text-center" style="margin-top : 120px;" >
   <form method="post" action="{% url 'common:login' %}">
   
-    <img class="mb-4" src='{%static "images/logo.png" %}' alt="" width="350" height="240">
+    <img class="mb-4" src="https://my-chachacha-test-bucket.s3.ap-northeast-2.amazonaws.com/images/logo.png" alt="" width="350" height="240">
     {% csrf_token %}
     {% include 'form_errors.html' %}
     <div class="form-floating">
