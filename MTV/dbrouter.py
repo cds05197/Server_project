@@ -10,11 +10,9 @@ class MultiDBRouter(object):
             if conn.in_atomic_block:
                 return 'default'
         databases = ['default', 'readonly']
-        print("is read traffic")
         return random.choice(databases)
 
     def db_for_write(self, model, **hints):
-        print("is write traffic")
         return "default"
 
     def allow_relation(self, obj1, obj2, **hints):

@@ -4,16 +4,20 @@ from django.urls import reverse
 from MTV.models import Car,Manager,OptionA,OptionB,OptionC,OptionD,MyCar
 import random
 from django.contrib.auth.models import User
+import time
 
 
 # Create your views here.
 
 
 def Login (request):
+  
   return render(request, "MTV/login.html")
 
 def Main (request):
+
   Car_List = Car.objects.all().order_by()
+
   return render(request, "MTV/main.html",{"Car_List" : Car_List})
 
 

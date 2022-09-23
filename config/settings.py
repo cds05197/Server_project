@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'MTV.apps.MtvConfig',
     'common.apps.CommonConfig',
     'django.contrib.humanize',
+    'cacheops',
 ]
 
 MIDDLEWARE = [
@@ -84,11 +85,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 
-# Test Flaf if you want Deployment, Change Value to False
-is_Production = True
+#This is Variable used DB if you want Deployment, Change Value to False
+is_Production = False
 DataBase_Name = "django_db"
-DataBase_Write_Endpoint = "test-db-cluster.cluster-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
-DataBase_Read_Endpoint = "test-db-cluster-readreplica.clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
+DataBase_Write_Endpoint = "django-snapshot-test-cluster.cluster-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
+DataBase_Read_Endpoint = "django-snapshot-test-cluster.cluster-ro-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
 DataBase_User = "root"
 DataBase_User_Password = "tmdgur123"
 
@@ -127,6 +128,28 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+# If use cache in Redis change value true
+USE_CACHE = True
+REDIS_HOST = "redis://192.168.1.200:6379/1"
+
+CACHEOPS_LRU = True
+
+if USE_CACHE:
+    CACHEOPS_LRU = True
+    CACHEOPS_DEGRADE_ON_FAILURE = True
+    CACHEOPS_DEFAULTS = {
+        'timeout': 60*5,
+        'cache_on_save': True,
+        'ops' : 'all'
+        #'local_get': False,
+    }
+    CACHEOPS_REDIS = REDIS_HOST
+    CACHEOPS = {
+        '*.*' : {},
+    }
+
+
 
 
 # Password validation
