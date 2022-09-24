@@ -14,6 +14,10 @@ def Login (request):
   
   return render(request, "MTV/login.html")
 
+def Timeout (request):
+  
+  return render(request, "common/session_timeout.html")
+
 def Main (request):
 
   Car_List = Car.objects.all().order_by()

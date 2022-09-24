@@ -7,6 +7,7 @@ urlpatterns = [
     path('mycar/', views.Mycar, name="mycar"),
     path('login/',views.Login, name="login"),
     path('main/',views.Main, name="main"),
+    path('session_timeout/',views.Timeout),
     path('make/', views.Create),
     path('makeopta/', views.Create_Opta),
     path('makeoptb/', views.Create_Optb),

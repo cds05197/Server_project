@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -130,11 +131,13 @@ else:
     }
 
 # If use cache in Redis change value true
+IS_HOME = True
+if IS_HOME:
+    REDIS_HOST = "172.30.1.7"
+else:
+    REDIS_HOST = "192.168.1.200"
+
 USE_CACHE = True
-REDIS_HOST = "redis://192.168.1.200:6379/1"
-
-CACHEOPS_LRU = True
-
 if USE_CACHE:
     CACHEOPS_LRU = True
     CACHEOPS_DEGRADE_ON_FAILURE = True
@@ -142,13 +145,29 @@ if USE_CACHE:
         'timeout': 60*5,
         'cache_on_save': True,
         'ops' : 'all'
-        #'local_get': False,
     }
-    CACHEOPS_REDIS = REDIS_HOST
+    CACHEOPS_REDIS = {
+        'host' : REDIS_HOST,
+        'port' : 6379,
+        'db' : 1,
+        'socket_timeout': 1
+    }
     CACHEOPS = {
-        '*.*' : {},
+        'MTV.*' : {},
     }
 
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_EXPIRE_SECONDS = 1800
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+SESSION_TIMEOUT_REDIRECT = '/MTV/session_timeout'
+SESSION_REDIS = {
+    'host': REDIS_HOST,
+    'port': 6379,
+    'db': 2,
+    'prefix': 'session',
+    'socket_timeout': 1,
+    'retry_on_timeout': False
+    }
 
 
 
