@@ -208,14 +208,13 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 import os
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
+if DEBUG:
+    STATICFILES_DIRS = [
     BASE_DIR / 'static',
-]
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = '/MTV'
 LOGOUT_REDIRECT_URL = '/MTV'

@@ -23,11 +23,15 @@ from django.urls import path, include
 from MTV import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import url
+from django.views.static import serve
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('MTV/', include('MTV.urls')),
     path('common/', include('common.urls')),
-    path('',views.Main),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('',views.Main), 
+    url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT})
+]
+
