@@ -3,7 +3,7 @@
 cd /root
 git clone https://github.com/cds05197/django.git
 cd django
-\cp -rf config MTV common template requirements.txt /my-django
+\cp -rf config MTV common templates requirements.txt /my-django
 cd /my-django
 
 sudo sed -i "/twisted-iocpsupport==1.0.2/d" /my-django/requirements.txt
