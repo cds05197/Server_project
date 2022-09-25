@@ -26,4 +26,5 @@ hooks:
      runas: root
   Install:
    - location: /scripts/update_project.sh
+     timeout: 300
      runas: root
