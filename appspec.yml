@@ -5,9 +5,9 @@ files:
    destination: /root/django
 hooks:
   BeforeInstall:
-   - location: /scripts/before_update
+   - location: /scripts/before_update.sh
      timeout: 300
      runas: root
   Install:
-   - location: /scripts/update_project
+   - location: /scripts/update_project.sh
      runas: root
