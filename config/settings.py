@@ -16,7 +16,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-
+DEPLOYMENT = False
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -124,7 +124,7 @@ if is_Production:
 
 # In Pord Case, Use RDS Aurora and read replica
 if is_Production:
-    # Get Secret to AWS Secret Manager
+    # Get Secret to AWS Secret Managerg
     SECRET = get_secret()
     SECRET['username']
     DataBase_User = SECRET['username']
