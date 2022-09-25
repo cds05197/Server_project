@@ -4,21 +4,21 @@ files:
  - source: /
    destination: /root/django
 permissions:
-  - object: /scripts
-    pattern: "before_update.sh"
+  - object: scripts
+    pattern: "**"
     owner: root
     group: root
     mode: 755
     type:
       - file
-permissions:
-  - object: /scripts
-    pattern: "update_project.sh"
+  - object: /root/django/scripts
+    pattern: "**"
     owner: root
     group: root
     mode: 755
     type:
       - file
+
 hooks:
   BeforeInstall:
    - location: /scripts/before_update.sh
