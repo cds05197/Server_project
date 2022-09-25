@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 #This is Variable used DB if you want Deployment, Change Value to False
-is_Production = True
+is_Production = False
 DataBase_Write_Endpoint = "kgcha-db-cluster-cluster.cluster-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
 DataBase_Read_Endpoint = "kgcha-db-cluster-cluster.cluster-ro-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
 
