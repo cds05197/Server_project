@@ -24,7 +24,7 @@ hooks:
    - location: /scripts/before_update.sh
      timeout: 30
      runas: root
-  Install:
+  AfterInstall:
    - location: /scripts/update_project.sh
      timeout: 300
      runas: root
