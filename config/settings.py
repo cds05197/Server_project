@@ -114,19 +114,22 @@ if is_Production:
         secret_str = cache.get_secret_string(secret_name)
         secret_data = json.loads(secret_str)
         return secret_data
+
         
 
-# TEST_ID=get_secret()
-# print(type(TEST_ID))
-SECRET = get_secret()
-SECRET['username']
-DataBase_User = SECRET['username']
-DataBase_User_Password = SECRET['password']
+
+
 
 
 
 # In Pord Case, Use RDS Aurora and read replica
 if is_Production:
+    # Get Secret to AWS Secret Manager
+    SECRET = get_secret()
+    SECRET['username']
+    DataBase_User = SECRET['username']
+    DataBase_User_Password = SECRET['password']
+
     DATABASE_ROUTERS = [
     'MTV.dbrouter.MultiDBRouter',
     ]
