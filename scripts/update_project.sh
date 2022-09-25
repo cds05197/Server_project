@@ -1,8 +1,8 @@
 #!/bin/bash
 
 cd /root
-git clone https://github.com/cds05197/django.git
-cd django
+git clone https://github.com/cds05197/django.git && cd django
+
 \cp -rf config MTV common templates requirements.txt /my-django
 cd /my-django
 
