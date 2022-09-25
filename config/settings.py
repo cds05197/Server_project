@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -87,12 +88,41 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 #This is Variable used DB if you want Deployment, Change Value to False
-is_Production = False
-DataBase_Name = "django_db"
-DataBase_Write_Endpoint = "django-snapshot-test-cluster.cluster-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
-DataBase_Read_Endpoint = "django-snapshot-test-cluster.cluster-ro-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
-DataBase_User = "root"
-DataBase_User_Password = "tmdgur123"
+is_Production = True
+DataBase_Write_Endpoint = "kgcha-db-cluster-cluster.cluster-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
+DataBase_Read_Endpoint = "kgcha-db-cluster-cluster.cluster-ro-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
+
+## Get User, Password from Secret Manager
+if is_Production:
+    import boto3.session
+    import json
+    from aws_secretsmanager_caching import SecretCache, SecretCacheConfig 
+
+    def get_secret():
+
+        secret_name = "Dev/kgcha/mysql_aurora"
+        region_name = "ap-northeast-2"
+
+        # Create a Secrets Manager client
+        session = boto3.session.Session()
+        client = session.client(
+            service_name='secretsmanager',
+            region_name=region_name
+        )
+        cache_config = SecretCacheConfig()
+        cache = SecretCache( config = cache_config, client = client)
+        secret_str = cache.get_secret_string(secret_name)
+        secret_data = json.loads(secret_str)
+        return secret_data
+        
+
+# TEST_ID=get_secret()
+# print(type(TEST_ID))
+SECRET = get_secret()
+SECRET['username']
+DataBase_User = SECRET['username']
+DataBase_User_Password = SECRET['password']
+
 
 
 # In Pord Case, Use RDS Aurora and read replica
@@ -104,7 +134,7 @@ if is_Production:
         'default': {
 
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': DataBase_Name,
+            'NAME': "django_db",
             'USER': DataBase_User,
             'PASSWORD': DataBase_User_Password,
             'HOST': DataBase_Write_Endpoint,
@@ -113,7 +143,7 @@ if is_Production:
         },
         'readonly': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': DataBase_Name,
+            'NAME': "django_db",
             'USER': DataBase_User,
             'PASSWORD': DataBase_User_Password,
             'HOST': DataBase_Read_Endpoint,
@@ -156,18 +186,18 @@ if USE_CACHE:
         'MTV.*' : {},
     }
 
-SESSION_ENGINE = 'redis_sessions.session'
-SESSION_EXPIRE_SECONDS = 1800
-SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
-SESSION_TIMEOUT_REDIRECT = '/MTV/session_timeout'
-SESSION_REDIS = {
-    'host': REDIS_HOST,
-    'port': 6379,
-    'db': 2,
-    'prefix': 'session',
-    'socket_timeout': 1,
-    'retry_on_timeout': False
-    }
+    SESSION_ENGINE = 'redis_sessions.session'
+    SESSION_EXPIRE_SECONDS = 1800
+    SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+    SESSION_TIMEOUT_REDIRECT = '/MTV/session_timeout'
+    SESSION_REDIS = {
+        'host': REDIS_HOST,
+        'port': 6379,
+        'db': 2,
+        'prefix': 'session',
+        'socket_timeout': 1,
+        'retry_on_timeout': False
+        }
 
 
 
