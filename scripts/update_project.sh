@@ -5,6 +5,7 @@ cd /root/django
 
 \cp -rf config MTV common templates requirements.txt /my-django
 cd /my-django
+source myhome/bin/activate
 
 sudo sed -i "/twisted-iocpsupport==1.0.2/d" /my-django/requirements.txt
 pip install -r requirements.txt
