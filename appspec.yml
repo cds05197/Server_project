@@ -3,6 +3,14 @@ os: linux
 files:
  - source: /
    destination: /root/django
+permissions:
+  - object: /scripts
+    pattern: "*.sh"
+    owner: root
+    group: root
+    mode: 755
+    type:
+      - file
 hooks:
   BeforeInstall:
    - location: /scripts/before_update.sh
