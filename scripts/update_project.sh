@@ -2,7 +2,6 @@
 
 cd /root/django
 
-
 \cp -rf config MTV common templates requirements.txt /my-django
 cd /my-django
 source myhome/bin/activate
