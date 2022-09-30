@@ -16,6 +16,9 @@ def Login (request):
 def Timeout (request):
   return render(request, "common/session_timeout.html")
 
+def Sessiontest (request):
+  return render(request, "MTV/session.html")
+
 def Main (request):
   Car_List = Car.objects.all().order_by()
   return render(request, "MTV/main.html",{"Car_List" : Car_List})

@@ -169,7 +169,7 @@ else:
 # If use cache in Redis change value true
 REDIS_HOST = "test-redis-001.o0y8tq.0001.apn2.cache.amazonaws.com"
 
-USE_CACHE = True
+USE_CACHE = False
 if USE_CACHE:
     CACHEOPS_LRU = True
     CACHEOPS_DEGRADE_ON_FAILURE = True

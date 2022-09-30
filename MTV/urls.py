@@ -12,6 +12,7 @@ urlpatterns = [
     path('makecache/', views.Cachemake),
     path('deletecache/', views.Cachedelete),
     path('testcache/', views.Cachetest, name="cache"),
+    path('sessiontest/', views.Sessiontest),
     path('makeopta/', views.Create_Opta),
     path('makeoptb/', views.Create_Optb),
     path('makeoptc/', views.Create_Optc),
