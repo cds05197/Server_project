@@ -89,12 +89,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 #This is Variable used DB if you want Deployment, Change Value to False
-is_Production = False
-DataBase_Write_Endpoint = "kgcha-db-cluster-cluster.cluster-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
-DataBase_Read_Endpoint = "kgcha-db-cluster-cluster.cluster-ro-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
+is_Production = True
+DataBase_Write_Endpoint = "test-db-read-replica-cluster-cluster.cluster-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
+DataBase_Read_Endpoint = "test-db-read-replica-cluster-cluster.cluster-ro-clfyxk92vagu.ap-northeast-2.rds.amazonaws.com"
 
 ## Get User, Password from Secret Manager
-if is_Production:
+Secret = False
+if Secret:
     import boto3.session
     import json
     from aws_secretsmanager_caching import SecretCache, SecretCacheConfig 
@@ -126,17 +127,18 @@ if is_Production:
 # In Pord Case, Use RDS Aurora and read replica
 if is_Production:
     # Get Secret to AWS Secret Managerg
-    SECRET = get_secret()
-    SECRET['username']
-    DataBase_User = SECRET['username']
-    DataBase_User_Password = SECRET['password']
+    # SECRET = get_secret()
+    # SECRET['username']
+    # DataBase_User = SECRET['username']
+    # DataBase_User_Password = SECRET['password']
+    DataBase_User = "root"
+    DataBase_User_Password = "tmdgur123"
 
     DATABASE_ROUTERS = [
     'MTV.dbrouter.MultiDBRouter',
     ]
     DATABASES = {
         'default': {
-
             'ENGINE': 'django.db.backends.mysql',
             'NAME': "django_db",
             'USER': DataBase_User,
@@ -165,13 +167,9 @@ else:
     }
 
 # If use cache in Redis change value true
-IS_HOME = True
-if IS_HOME:
-    REDIS_HOST = "172.30.1.7"
-else:
-    REDIS_HOST = "192.168.1.200"
+REDIS_HOST = "test-redis-001.o0y8tq.0001.apn2.cache.amazonaws.com"
 
-USE_CACHE = False
+USE_CACHE = True
 if USE_CACHE:
     CACHEOPS_LRU = True
     CACHEOPS_DEGRADE_ON_FAILURE = True

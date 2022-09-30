@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from MTV.models import Car,Manager,OptionA,OptionB,OptionC,OptionD,MyCar
+from MTV.models import Car,Manager,OptionA,OptionB,OptionC,OptionD,MyCar,Cachedata
 import random
 from django.contrib.auth.models import User
 import time
@@ -11,19 +11,48 @@ import time
 
 
 def Login (request):
-  
   return render(request, "MTV/login.html")
 
 def Timeout (request):
-  
   return render(request, "common/session_timeout.html")
 
 def Main (request):
-
   Car_List = Car.objects.all().order_by()
-
   return render(request, "MTV/main.html",{"Car_List" : Car_List})
 
+def Cachemake (request):
+  cnt = Cachedata.objects.count()
+  if cnt == 0: 
+    for i in range(1000):
+      data = Cachedata(key = "number", value = i)
+      data.save()
+    print("CacheDataCreate")
+  else:
+    print("Data already exist")
+  return HttpResponseRedirect(reverse('MTV:cache')) 
+   
+def Cachetest (request):
+  start = time.time()
+  datas = Cachedata.objects.filter(key__icontains="number")
+  end = time.time() - start
+  
+  sum = 0
+  for item in datas:
+    sum += item.value
+  print(end)
+  print(sum)
+  return render(request, "MTV/cachetest.html",{"Cache" : sum, "Time": end})
+
+def Cachedelete (request):
+  list = Cachedata.objects.all()
+  cnt = Cachedata.objects.count()
+  if cnt != 0:
+    for i in list:
+      i.delete()
+    print("delete all success")
+  else:
+    print("Table is already empty")
+  return HttpResponseRedirect(reverse('MTV:cache'))
 
 def Search_reset (request, keyword):
   str = keyword

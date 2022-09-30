@@ -1,3 +1,4 @@
+from xml.etree.ElementInclude import default_loader
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -30,7 +31,11 @@ class Car(models.Model):
 class MyCar(models.Model):
   mycar = models.ForeignKey(Car, on_delete=models.CASCADE)
   car_user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+  
+class Cachedata(models.Model):
+  key = models.CharField(max_length=10, default="")
+  value = models.IntegerField()
+  
 class OptionA(models.Model):
   Car = models.ForeignKey(Car,on_delete=models.CASCADE)
   opt1 = models.BooleanField(default=False)

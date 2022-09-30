@@ -1,0 +1,14 @@
+{% extends 'MTV/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div>
+  {% if Cache %}
+  <p class="fs-1 fw-bold" style="text-align : center;"> Sum is {{Cache}} </p>
+  <p class="fs-1 fw-bold" style="text-align : center;"> Data Query Time is  {{Time}} </p>
+  {% else %}
+  <p class="fs-1 fw-bold" style="text-align : center;"> There is no data </p>
+  {% endif %}
+</div>
+{% endblock%}
+
